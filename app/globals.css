@@ -150,6 +150,18 @@ main :is(h1, h2, p, ul, form, article) {
   padding-top: 0.25rem;
 }
 
+.shot-beat .beat-copy {
+  position: sticky;
+  top: 8rem;
+  z-index: 20;
+}
+
+@media (max-width: 720px) {
+  .shot-beat .beat-copy {
+    top: 11rem;
+  }
+}
+
 body:has(.hall-canvas) .beat-frame {
   border-color: transparent;
 }

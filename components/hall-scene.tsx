@@ -9,6 +9,7 @@ import {
   type Object3D,
   type SpotLight,
 } from "three";
+import { isProofPublished } from "@/content/about";
 import { getPublishedArticles } from "@/content/articles";
 import { getPublishedOfferings } from "@/content/offerings";
 import { chamberAnchor } from "@/lib/hall-pose";
@@ -176,6 +177,7 @@ export function HallScene({
 
   const offerings = getPublishedOfferings();
   const articles = getPublishedArticles();
+  const proofPublished = isProofPublished();
   const servicesZ = chamberAnchor.services;
   const solutionsZ = chamberAnchor.solutions;
   const blogsZ = chamberAnchor.blogs;
@@ -215,6 +217,26 @@ export function HallScene({
       </mesh>
       <mesh position={[0.8, 1.5, -60]} material={shellMaterial}>
         <boxGeometry args={[0.06, 3, 6]} />
+      </mesh>
+      <mesh position={[-1.15, 1.5, -4]} material={shellMaterial}>
+        <boxGeometry args={[0.08, 3, 4]} />
+      </mesh>
+      <mesh position={[1.15, 1.5, -4]} material={shellMaterial}>
+        <boxGeometry args={[0.08, 3, 4]} />
+      </mesh>
+      <mesh position={[-2.4, 1.5, -9]} material={shellMaterial}>
+        <boxGeometry args={[0.08, 3, 3]} />
+      </mesh>
+      <mesh position={[2.4, 1.5, -9]} material={shellMaterial}>
+        <boxGeometry args={[0.08, 3, 3]} />
+      </mesh>
+      {proofPublished ? (
+        <mesh position={[-3.15, 1.5, -14]} material={shellMaterial}>
+          <boxGeometry args={[0.08, 2.4, 5]} />
+        </mesh>
+      ) : null}
+      <mesh position={[0, 1.25, -38]} material={volumeMaterial}>
+        <planeGeometry args={[1.05, 1.7]} />
       </mesh>
       <mesh position={[-1.7, 1.2, servicesZ + 2.25]} material={passingLight}>
         <planeGeometry args={[1.55, 2.05]} />
