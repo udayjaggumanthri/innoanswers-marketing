@@ -10,6 +10,7 @@ export const homeShotCopy = {
   problem: "The passage tightens while the problem is still narrow.",
   possibility: "The same passage opens once a direction is possible.",
   services: "Three services, seen from a distance.",
+  solutions: "Solutions",
   offerings: "Further on, only what has been published.",
   plane: "One plane is enough to stop.",
 };

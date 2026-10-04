@@ -188,20 +188,21 @@ export function shotPose(
   amount: number,
 ): Pose | null {
   const t = Math.min(1, Math.max(0, amount));
+  const arrived = t <= 0.18 ? t / 0.18 : 1;
   if (chamber === "blogs" && shot === "held") {
     return heldPlanePose();
   }
   if (chamber === "home" && isHomeShot(shot)) {
     const to = homeWaypoint(shot);
     if (previousShot && isHomeShot(previousShot)) {
-      return lerpPose(homeWaypoint(previousShot), to, t);
+      return lerpPose(homeWaypoint(previousShot), to, arrived);
     }
     return to;
   }
   if (chamber === "about" && isAboutShot(shot)) {
     const to = aboutWaypoint(shot);
     if (previousShot && isAboutShot(previousShot)) {
-      return lerpPose(aboutWaypoint(previousShot), to, t);
+      return lerpPose(aboutWaypoint(previousShot), to, arrived);
     }
     return to;
   }

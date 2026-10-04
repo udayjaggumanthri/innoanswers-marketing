@@ -69,9 +69,28 @@ function readActiveBeat(scrollY: number): {
   };
 }
 
+function markCurrentShot(scrollY: number) {
+  const shots = [...document.querySelectorAll<HTMLElement>(".shot-beat")];
+  if (shots.length === 0) {
+    return;
+  }
+  let chosen = shots[0];
+  if (scrollY > 0) {
+    for (const shot of shots) {
+      if (documentTop(shot) <= scrollY) {
+        chosen = shot;
+      }
+    }
+  }
+  for (const shot of shots) {
+    shot.toggleAttribute("data-shot-current", shot === chosen);
+  }
+}
+
 function applyPose(scrollY: number) {
   const chamber = readChamber();
   const opening = scrollY <= 0;
+  markCurrentShot(scrollY);
   const beat = readActiveBeat(scrollY);
   const alongShot = beat.shot
     ? shotPose(chamber, beat.shot, opening ? null : beat.previousShot, opening ? 0 : beat.localT)

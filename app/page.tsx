@@ -19,6 +19,10 @@ export default function HomePage() {
       <ShotBeat shot="introduction" beat="still">
         <h1>{siteStandIn.homeHeadline}</h1>
         <p>{siteStandIn.homeLede}</p>
+        <ServiceNameLinks hrefFor={(id) => `/services#${id}`} />
+        <p>
+          <a href="/solutions">{homeShotCopy.solutions}</a>
+        </p>
       </ShotBeat>
       <ShotBeat shot="discovery">
         <p>{homeShotCopy.discovery}</p>
@@ -31,7 +35,6 @@ export default function HomePage() {
       </ShotBeat>
       <ShotBeat shot="services">
         <p>{homeShotCopy.services}</p>
-        <ServiceNameLinks hrefFor={(id) => `/services#${id}`} />
       </ShotBeat>
       {offerings.length > 0 ? (
         <ShotBeat shot="offerings">

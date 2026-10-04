@@ -155,10 +155,18 @@ main :is(h1, h2, p, ul, form, article) {
   z-index: 20;
 }
 
+body:has(.hall-canvas) .shot-beat:not([data-shot-current]) .beat-copy {
+  visibility: hidden;
+}
+
 @media (max-width: 720px) {
   .shot-beat .beat-copy {
     top: 15rem;
   }
+}
+
+.shot-beat .beat-frame {
+  min-height: 120vh;
 }
 
 body:has(.hall-canvas) .beat-frame {
