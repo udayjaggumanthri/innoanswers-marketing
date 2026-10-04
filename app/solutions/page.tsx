@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { StillFrame } from "@/components/still-frame";
-import { getPublishedOfferings } from "@/content/offerings";
+import { getPublishedOfferings, solutionsStandIn } from "@/content/offerings";
 
 export function generateMetadata(): Metadata {
   const offerings = getPublishedOfferings();
@@ -9,7 +9,7 @@ export function generateMetadata(): Metadata {
     description:
       offerings.length === 0
         ? "No offerings have been confirmed for publication."
-        : "Published offerings.",
+        : solutionsStandIn.description,
   };
 }
 
@@ -22,13 +22,23 @@ export default function SolutionsPage() {
       {offerings.length === 0 ? (
         <p>No offerings have been confirmed for publication.</p>
       ) : (
-        <ul className="offering-list">
-          {offerings.map((offering) => (
-            <li key={offering.slug}>{offering.title}</li>
-          ))}
-        </ul>
+        <>
+          <p>{solutionsStandIn.intro}</p>
+          <ul className="offering-list">
+            {offerings.map((offering) => (
+              <li key={offering.slug}>
+                {offering.title}
+                <p>{offering.summary}</p>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
-      <StillFrame beat={offerings.length === 0 ? "still" : "reveal"} short={offerings.length === 0} />
+      {offerings.length === 0 ? (
+        <StillFrame beat="still" short />
+      ) : (
+        offerings.map((offering) => <StillFrame key={offering.slug} beat="reveal" />)
+      )}
     </div>
   );
 }

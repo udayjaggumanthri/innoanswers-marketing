@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { ServiceNameLinks } from "@/components/service-name-links";
-import { serviceLines } from "@/content/service-lines";
+import { serviceLines, servicesStandIn } from "@/content/service-lines";
 import type { BeatName } from "@/lib/hall-pose";
 
 export const metadata: Metadata = {
   title: "Services",
-  description: "Technology Services, Business Services, and Consulting.",
+  description: servicesStandIn.description,
 };
 
 const serviceBeats: Record<(typeof serviceLines)[number]["id"], BeatName> = {
@@ -18,6 +18,7 @@ export default function ServicesPage() {
   return (
     <div data-chamber="services">
       <h1>Services</h1>
+      <p>{servicesStandIn.intro}</p>
       <ServiceNameLinks hrefFor={(id) => `#${id}`} />
       <p>
         <a href="/solutions">Solutions</a>
@@ -33,6 +34,7 @@ export default function ServicesPage() {
         >
           <div className="beat-copy">
             <h2 id={`${line.id}-heading`}>{line.name}</h2>
+            <p>{line.summary}</p>
           </div>
           <div className="beat-frame" aria-hidden="true" />
         </section>

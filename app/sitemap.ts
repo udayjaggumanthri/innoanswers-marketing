@@ -2,7 +2,16 @@ import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 import { getPublishedArticles } from "@/content/articles";
 
-const pagePaths = ["/", "/about", "/services", "/solutions", "/blogs", "/contact"] as const;
+const pagePaths = [
+  "/",
+  "/about",
+  "/services",
+  "/solutions",
+  "/blogs",
+  "/contact",
+  "/legal",
+  "/privacy",
+] as const;
 
 function originFromRequest(headerList: Headers): string | null {
   const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
