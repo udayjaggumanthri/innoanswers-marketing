@@ -17,7 +17,7 @@ export async function generateMetadata({
   if (!article) {
     return { title: "Page not found" };
   }
-  return { title: article.title };
+  return { title: article.title, description: article.summary };
 }
 
 export default async function BlogArticlePage({
@@ -33,6 +33,9 @@ export default async function BlogArticlePage({
     <div data-chamber="blogs">
       <article>
         <h1>{article.title}</h1>
+        {article.paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
       </article>
       <StillFrame beat="still" short />
     </div>

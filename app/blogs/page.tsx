@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { StillFrame } from "@/components/still-frame";
-import { getPublishedArticles } from "@/content/articles";
+import { blogsStandIn, getPublishedArticles } from "@/content/articles";
 
 export function generateMetadata(): Metadata {
   const articles = getPublishedArticles();
   return {
     title: "Blogs",
-    description:
-      articles.length === 0 ? "No articles have been published yet." : "Published articles.",
+    description: articles.length === 0 ? "No articles have been published yet." : blogsStandIn.description,
   };
 }
 
@@ -20,13 +19,17 @@ export default function BlogsPage() {
       {articles.length === 0 ? (
         <p>No articles have been published yet.</p>
       ) : (
-        <ul className="article-list">
-          {articles.map((article) => (
-            <li key={article.slug}>
-              <a href={`/blogs/${article.slug}`}>{article.title}</a>
-            </li>
-          ))}
-        </ul>
+        <>
+          <p>{blogsStandIn.intro}</p>
+          <ul className="article-list">
+            {articles.map((article) => (
+              <li key={article.slug}>
+                <a href={`/blogs/${article.slug}`}>{article.title}</a>
+                <p>{article.summary}</p>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
       {articles.length === 0 ? (
         <StillFrame beat="still" short />

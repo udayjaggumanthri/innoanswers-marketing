@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { ServiceNameLinks } from "@/components/service-name-links";
 import { StillFrame } from "@/components/still-frame";
+import { siteStandIn } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Home",
-  description: "The opening stays still until you scroll.",
+  description: siteStandIn.homeDescription,
 };
 
 export default function HomePage() {
   return (
     <div data-chamber="home">
-      <h1>Home</h1>
-      <p>The opening stays still until you scroll.</p>
+      <h1>{siteStandIn.homeHeadline}</h1>
+      <p>{siteStandIn.homeLede}</p>
       <ServiceNameLinks hrefFor={(id) => `/services#${id}`} />
       <p>
         <a href="/solutions">Solutions</a>

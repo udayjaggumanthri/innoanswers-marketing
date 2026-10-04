@@ -1,3 +1,5 @@
+import { siteStandIn } from "@/content/site";
+
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
@@ -9,6 +11,11 @@ const navItems = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-foreground bg-background px-5 py-3 sm:py-4">
+      {/* Full page load so the hall cuts to the home still pose. */}
+      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+      <a className="wordmark" href="/">
+        {siteStandIn.wordmark}
+      </a>
       <nav aria-label="Main" className="site-nav">
         <ul className="m-0 flex list-none flex-wrap gap-x-5 gap-y-2 p-0">
           {navItems.map((item) => (

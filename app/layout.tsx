@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HallLoader } from "@/components/hall-loader";
+import { siteStandIn } from "@/content/site";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SkipLink } from "@/components/skip-link";
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
     default: "Home",
     template: "%s",
   },
-  description: "The opening stays still until you scroll.",
+  description: siteStandIn.homeDescription,
   robots: {
     index: true,
     follow: true,

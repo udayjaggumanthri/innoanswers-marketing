@@ -38,6 +38,26 @@ a:not(.contact-action) {
   text-underline-offset: 0.15em;
 }
 
+a.wordmark {
+  color: var(--foreground);
+  background: var(--background);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+
+.site-footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .skip-link {
   position: absolute;
   left: 0.75rem;
