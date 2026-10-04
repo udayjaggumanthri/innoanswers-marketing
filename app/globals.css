@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+/* Temporary tokens. Replace only this block when brand values are approved. */
+:root {
+  --background: #f4f2ee;
+  --foreground: #171717;
+  --accent: #123056;
+  --accent-foreground: var(--background);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+}
+
+html {
+  font-family: revert;
+  color-scheme: light;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+}
+
+a:not(.contact-action) {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  z-index: 20;
+  transform: translateY(-200%);
+  background: var(--foreground);
+  color: var(--background);
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+p {
+  margin: 0 0 1rem;
+  max-width: 65ch;
+  line-height: 1.5;
+}
+
+.service-list,
+.article-list,
+.offering-list {
+  margin: 0 0 1.5rem;
+  padding-left: 1.25rem;
+}
+
+.service-list a,
+.article-list a,
+.site-nav a,
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  padding: 0.25rem 0;
+}
+
+.service-section {
+  margin-top: 1.5rem;
+  scroll-margin-top: 1rem;
+}
+
+.opening-frame {
+  position: relative;
+  min-height: 50vh;
+  margin-top: 1.5rem;
+  border: 1px solid var(--foreground);
+  background: var(--background);
+}
+
+.opening-still {
+  min-height: 50vh;
+}
+
+.opening-canvas,
+.opening-canvas * {
+  pointer-events: none !important;
+}
+
+.opening-canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 36rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-weight: 700;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--foreground);
+}
+
+input,
+textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.65rem;
+}
+
+textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-width: 2px;
+}
+
+.field-error {
+  margin: 0;
+  font-weight: 700;
+}
+
+button {
+  justify-self: start;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+}
+
+button:disabled {
+  opacity: 1;
+}
+
+.form-status {
+  margin: 0;
+  font-weight: 700;
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
