@@ -93,6 +93,7 @@ p {
   list-style: disc;
 }
 
+main p > a,
 .service-list a,
 .article-list a,
 .site-nav a,
