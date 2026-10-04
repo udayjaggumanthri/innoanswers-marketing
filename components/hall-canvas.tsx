@@ -40,7 +40,7 @@ export function HallCanvas() {
           stencil: false,
         }}
         style={{ pointerEvents: "none" }}
-        onCreated={({ gl, scene, camera }) => {
+        onCreated={({ gl, scene }) => {
           gl.shadowMap.enabled = false;
           gl.toneMapping = NoToneMapping;
           makeCanvasInert(gl.domElement);
@@ -54,7 +54,6 @@ export function HallCanvas() {
             scene.environment = target.texture;
             pmrem.dispose();
           }
-          camera.lookAt(0, 1.3, 0);
         }}
       >
         {colors ? <HallScene background={colors.background} foreground={colors.foreground} /> : null}

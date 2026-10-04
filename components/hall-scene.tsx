@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import {
   FrontSide,
   MeshPhysicalMaterial,
@@ -14,18 +14,34 @@ import { getPublishedOfferings } from "@/content/offerings";
 import { chamberAnchor } from "@/lib/hall-pose";
 import { HallCamera } from "@/components/hall-camera";
 
+function SettleTransmission() {
+  const invalidate = useThree((state) => state.invalidate);
+  const remaining = useRef(2);
+
+  useFrame(() => {
+    if (remaining.current > 0) {
+      remaining.current -= 1;
+      invalidate();
+    }
+  });
+
+  return null;
+}
+
 function DirectedBeam({
   color,
   position,
   target,
   intensity,
   angle = 0.22,
+  distance = 10,
 }: {
   color: string;
   position: [number, number, number];
   target: [number, number, number];
   intensity: number;
   angle?: number;
+  distance?: number;
 }) {
   const light = useRef<SpotLight>(null);
   const targetRef = useRef<Object3D>(null);
@@ -46,7 +62,7 @@ function DirectedBeam({
         intensity={intensity}
         angle={angle}
         penumbra={0.5}
-        distance={10}
+        distance={distance}
         decay={2}
         position={position}
         castShadow={false}
@@ -61,11 +77,13 @@ function PlaneRun({
   count,
   origin,
   span,
+  size = [0.9, 1.5],
 }: {
   material: MeshPhysicalMaterial;
   count: number;
   origin: [number, number, number];
   span: number;
+  size?: [number, number];
 }) {
   if (count <= 0) {
     return null;
@@ -82,7 +100,7 @@ function PlaneRun({
           position={[start + step * index, origin[1], origin[2]]}
           material={material}
         >
-          <planeGeometry args={[0.9, 1.5]} />
+          <planeGeometry args={size} />
         </mesh>
       ))}
     </>
@@ -96,17 +114,32 @@ export function HallScene({
   background: string;
   foreground: string;
 }) {
+  const techMaterial = useMemo(
+    () =>
+      new MeshPhysicalMaterial({
+        color: background,
+        roughness: 0.62,
+        metalness: 0,
+        transmission: 0.92,
+        thickness: 0.42,
+        ior: 1.05,
+        attenuationColor: background,
+        attenuationDistance: Infinity,
+        side: FrontSide,
+      }),
+    [background],
+  );
   const volumeMaterial = useMemo(
     () =>
       new MeshPhysicalMaterial({
         color: foreground,
         roughness: 0.62,
         metalness: 0,
-        transmission: 0.78,
-        thickness: 0.8,
+        transmission: 0.35,
+        thickness: 0.2,
         ior: 1.15,
         attenuationColor: background,
-        attenuationDistance: 2.4,
+        attenuationDistance: 1.2,
         side: FrontSide,
       }),
     [background, foreground],
@@ -123,9 +156,9 @@ export function HallScene({
   const passingLight = useMemo(
     () =>
       new MeshStandardMaterial({
-        color: background,
+        color: "#000000",
         emissive: background,
-        emissiveIntensity: 1.4,
+        emissiveIntensity: 1,
         roughness: 1,
         metalness: 0,
       }),
@@ -134,11 +167,12 @@ export function HallScene({
 
   useEffect(() => {
     return () => {
+      techMaterial.dispose();
       volumeMaterial.dispose();
       shellMaterial.dispose();
       passingLight.dispose();
     };
-  }, [passingLight, shellMaterial, volumeMaterial]);
+  }, [passingLight, shellMaterial, techMaterial, volumeMaterial]);
 
   const offerings = getPublishedOfferings();
   const articles = getPublishedArticles();
@@ -154,6 +188,7 @@ export function HallScene({
       <ambientLight color={background} intensity={0.55} />
       <directionalLight color={background} position={[1.5, 3.5, 6]} intensity={1.2} castShadow={false} />
       <HallCamera />
+      <SettleTransmission />
       <mesh position={[0, 0, -28]} material={shellMaterial}>
         <boxGeometry args={[8, 0.05, 74]} />
       </mesh>
@@ -181,32 +216,35 @@ export function HallScene({
       <mesh position={[0.8, 1.5, -60]} material={shellMaterial}>
         <boxGeometry args={[0.06, 3, 6]} />
       </mesh>
-      <mesh position={[-1.7, 1.25, servicesZ - 1.15]} material={passingLight}>
-        <planeGeometry args={[1.35, 1.9]} />
+      <mesh position={[-1.7, 1.2, servicesZ + 2.25]} material={passingLight}>
+        <planeGeometry args={[1.55, 2.05]} />
       </mesh>
-      <mesh position={[-1.7, 1.25, servicesZ]} material={volumeMaterial}>
-        <boxGeometry args={[1.7, 2.35, 1.7]} />
+      <mesh position={[-1.7, 1.2, servicesZ + 2.6]} material={techMaterial}>
+        <boxGeometry args={[1.7, 2.2, 0.42]} />
       </mesh>
       <directionalLight
         color={background}
-        position={[-1.7, 2.2, servicesZ - 3.2]}
-        intensity={4}
+        position={[-1.7, 2.4, servicesZ + 1.2]}
+        intensity={1.5}
         castShadow={false}
       />
       <PlaneRun
         material={volumeMaterial}
         count={5}
-        origin={[0.55, 1.15, servicesZ - 1.7]}
-        span={2.2}
+        origin={[0.35, 1.05, servicesZ + 2.6]}
+        span={1.85}
+        size={[0.16, 1.45]}
       />
-      <mesh position={[2.05, 0.72, servicesZ + 0.15]} material={volumeMaterial}>
-        <boxGeometry args={[0.62, 0.78, 0.62]} />
+      <mesh position={[1.95, 1.05, servicesZ + 2.6]} material={volumeMaterial}>
+        <boxGeometry args={[0.55, 0.72, 0.55]} />
       </mesh>
       <DirectedBeam
         color={background}
-        intensity={2400}
-        position={[2.05, 2.6, servicesZ + 1.7]}
-        target={[2.05, 0.72, servicesZ + 0.15]}
+        intensity={640}
+        angle={0.16}
+        distance={2.8}
+        position={[1.95, 2.4, servicesZ + 3.7]}
+        target={[1.95, 1.05, servicesZ + 2.6]}
       />
       {offerings.length === 0 ? (
         <DirectedBeam

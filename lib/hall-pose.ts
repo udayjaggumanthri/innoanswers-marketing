@@ -73,7 +73,22 @@ function lerpPose(start: Pose, end: Pose, amount: number): Pose {
   };
 }
 
+function servicesStill(): Pose {
+  const anchor = chamberAnchor.services;
+  return {
+    x: 0,
+    y: 2.05,
+    z: anchor + 8.2,
+    tx: 0,
+    ty: 1.15,
+    tz: anchor + 2.6,
+  };
+}
+
 export function stillPose(chamber: ChamberId): Pose {
+  if (chamber === "services") {
+    return servicesStill();
+  }
   const anchor = chamberAnchor[chamber];
   return {
     x: 0,
@@ -87,6 +102,28 @@ export function stillPose(chamber: ChamberId): Pose {
 
 export function poseFor(chamber: ChamberId, beat: BeatName, amount: number): Pose {
   const t = Math.min(1, Math.max(0, amount));
+  if (chamber === "services") {
+    const still = servicesStill();
+    const nearer = { ...still, z: still.z - 0.7 };
+    const aside = { ...nearer, x: 0.35, tx: 0.28 };
+    switch (beat) {
+      case "still":
+        return still;
+      case "pause":
+        return nearer;
+      case "approach":
+        return lerpPose(still, nearer, t);
+      case "reveal":
+        return lerpPose(nearer, aside, t);
+      case "continue":
+        return lerpPose(aside, still, t);
+      default: {
+        const unreachable: never = beat;
+        return unreachable;
+      }
+    }
+  }
+
   const still = stillPose(chamber);
   const approach = { ...still, z: still.z - 1.7, tz: still.tz - 1.3 };
   const reveal = { ...approach, x: 0.9, tx: 0.35 };

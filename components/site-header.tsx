@@ -8,7 +8,7 @@ const navItems = [
 
 export function SiteHeader() {
   return (
-    <header className="relative z-10 flex flex-wrap items-center justify-between gap-4 border-b border-foreground bg-background px-5 py-3 sm:py-4">
+    <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-foreground bg-background px-5 py-3 sm:py-4">
       <nav aria-label="Main" className="site-nav">
         <ul className="m-0 flex list-none flex-wrap gap-x-5 gap-y-2 p-0">
           {navItems.map((item) => (

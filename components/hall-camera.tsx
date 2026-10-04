@@ -67,9 +67,11 @@ export function HallCamera() {
     };
 
     apply();
+    const frame = requestAnimationFrame(apply);
     window.addEventListener("scroll", apply, { passive: true });
     window.addEventListener("resize", apply);
     return () => {
+      cancelAnimationFrame(frame);
       window.removeEventListener("scroll", apply);
       window.removeEventListener("resize", apply);
     };
