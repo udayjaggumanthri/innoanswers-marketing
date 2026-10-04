@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { ServiceNameLinks } from "@/components/service-name-links";
-import { StillFrame } from "@/components/still-frame";
+import { ShotBeat } from "@/components/still-frame";
+import { isProofPublished, proofStandIn } from "@/content/about";
+import { homeShotCopy } from "@/content/home-shot";
+import { getPublishedOfferings } from "@/content/offerings";
 import { siteStandIn } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -9,19 +12,48 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  const offerings = getPublishedOfferings();
+
   return (
     <div data-chamber="home">
-      <h1>{siteStandIn.homeHeadline}</h1>
-      <p>{siteStandIn.homeLede}</p>
-      <ServiceNameLinks hrefFor={(id) => `/services#${id}`} />
-      <p>
-        <a href="/solutions">Solutions</a>
-      </p>
-      <StillFrame beat="still" />
-      <StillFrame beat="approach" />
-      <StillFrame beat="pause" />
-      <StillFrame beat="reveal" />
-      <StillFrame beat="continue" />
+      <ShotBeat shot="introduction" beat="still">
+        <h1>{siteStandIn.homeHeadline}</h1>
+        <p>{siteStandIn.homeLede}</p>
+        <ServiceNameLinks hrefFor={(id) => `/services#${id}`} />
+        <p>
+          <a href="/solutions">{homeShotCopy.solutions}</a>
+        </p>
+      </ShotBeat>
+      <ShotBeat shot="discovery">
+        <p>{homeShotCopy.discovery}</p>
+      </ShotBeat>
+      <ShotBeat shot="problem">
+        <p>{homeShotCopy.problem}</p>
+      </ShotBeat>
+      <ShotBeat shot="possibility">
+        <p>{homeShotCopy.possibility}</p>
+      </ShotBeat>
+      <ShotBeat shot="services">
+        <p>{homeShotCopy.services}</p>
+      </ShotBeat>
+      {offerings.length > 0 ? (
+        <ShotBeat shot="offerings">
+          <p>{homeShotCopy.offerings}</p>
+          <ul className="offering-list">
+            {offerings.map((offering) => (
+              <li key={offering.slug}>{offering.title}</li>
+            ))}
+          </ul>
+        </ShotBeat>
+      ) : null}
+      {isProofPublished() ? (
+        <ShotBeat shot="proof">
+          <p>{proofStandIn.line}</p>
+        </ShotBeat>
+      ) : null}
+      <ShotBeat shot="plane">
+        <p>{homeShotCopy.plane}</p>
+      </ShotBeat>
     </div>
   );
 }

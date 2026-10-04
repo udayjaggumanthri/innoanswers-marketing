@@ -17,8 +17,7 @@ export default function ContactPage() {
         <a href={`mailto:${siteStandIn.contactEmail}`}>{siteStandIn.contactEmail}</a>.
       </p>
       <ContactForm />
-      <StillFrame beat="approach" />
-      <StillFrame beat="continue" />
+      <StillFrame beat="still" />
     </div>
   );
 }

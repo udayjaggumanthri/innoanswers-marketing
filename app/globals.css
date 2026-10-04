@@ -141,13 +141,32 @@ main p > a,
   z-index: 0;
 }
 
-.beat-copy,
 main :is(h1, h2, p, ul, form, article) {
   background: var(--background);
 }
 
 .beat-copy {
   padding-top: 0.25rem;
+}
+
+.shot-beat .beat-copy {
+  position: sticky;
+  top: 8rem;
+  z-index: 20;
+}
+
+body:has(.hall-canvas) .shot-beat:not([data-shot-current]) .beat-copy {
+  visibility: hidden;
+}
+
+@media (max-width: 720px) {
+  .shot-beat .beat-copy {
+    top: 15rem;
+  }
+}
+
+.shot-beat .beat-frame {
+  min-height: 120vh;
 }
 
 body:has(.hall-canvas) .beat-frame {

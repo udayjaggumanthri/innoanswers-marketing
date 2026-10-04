@@ -37,7 +37,7 @@ export default async function BlogArticlePage({
           <p key={paragraph}>{paragraph}</p>
         ))}
       </article>
-      <StillFrame beat="still" short />
+      <StillFrame beat="still" shot="held" />
     </div>
   );
 }

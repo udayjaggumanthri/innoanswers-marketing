@@ -1,3 +1,5 @@
+import { getPublishedAboutBeats } from "@/content/about";
+
 export const chamberIds = [
   "home",
   "about",
@@ -73,6 +75,140 @@ function lerpPose(start: Pose, end: Pose, amount: number): Pose {
   };
 }
 
+export const homeShotIds = [
+  "introduction",
+  "discovery",
+  "problem",
+  "possibility",
+  "services",
+  "offerings",
+  "proof",
+  "plane",
+] as const;
+
+export type HomeShotId = (typeof homeShotIds)[number];
+
+export const aboutShotIds = ["who", "think", "work", "believe", "why"] as const;
+
+export type AboutShotId = (typeof aboutShotIds)[number];
+
+export function isHomeShot(value: string | null | undefined): value is HomeShotId {
+  switch (value) {
+    case "introduction":
+    case "discovery":
+    case "problem":
+    case "possibility":
+    case "services":
+    case "offerings":
+    case "proof":
+    case "plane":
+      return true;
+    default:
+      return false;
+  }
+}
+
+export function isAboutShot(value: string | null | undefined): value is AboutShotId {
+  switch (value) {
+    case "who":
+    case "think":
+    case "work":
+    case "believe":
+    case "why":
+      return true;
+    default:
+      return false;
+  }
+}
+
+function homeWaypoint(shot: HomeShotId): Pose {
+  const servicesLook = chamberAnchor.services + 2.6;
+  switch (shot) {
+    case "introduction":
+      return { x: 0, y: 1.55, z: 5.5, tx: 0, ty: 1.3, tz: 0 };
+    case "discovery":
+      return { x: 0, y: 1.62, z: 2.4, tx: 0, ty: 1.4, tz: -6 };
+    case "problem":
+      return { x: 0, y: 1.5, z: -4, tx: 0, ty: 1.45, tz: -9 };
+    case "possibility":
+      return { x: 0, y: 1.75, z: -8, tx: 0, ty: 1.3, tz: servicesLook };
+    case "services":
+      return { x: 0, y: 2.7, z: -8.6, tx: 0, ty: 1.15, tz: servicesLook };
+    case "offerings":
+      return { x: 0, y: 2.55, z: -22, tx: 0, ty: 1.15, tz: chamberAnchor.solutions };
+    case "proof":
+      return { x: -0.15, y: 2.4, z: -27.5, tx: -2.55, ty: 1.35, tz: -31 };
+    case "plane":
+      return { x: 0, y: 2.3, z: -39.6, tx: 0, ty: 1.25, tz: -42 };
+    default: {
+      const unreachable: never = shot;
+      return unreachable;
+    }
+  }
+}
+
+function aboutWaypoint(shot: AboutShotId): Pose {
+  switch (shot) {
+    case "who":
+      return { x: 0, y: 1.55, z: -4.5, tx: 0, ty: 1.3, tz: -10 };
+    case "think":
+      return { x: 0.35, y: 1.6, z: -6, tx: 0.15, ty: 1.3, tz: -12 };
+    case "work":
+      return { x: -0.25, y: 1.5, z: -7.2, tx: 0, ty: 1.25, tz: -13 };
+    case "believe":
+      return { x: 0.2, y: 1.58, z: -8, tx: 0, ty: 1.3, tz: -14 };
+    case "why":
+      return { x: 0, y: 1.52, z: -9, tx: 0, ty: 1.28, tz: -15 };
+    default: {
+      const unreachable: never = shot;
+      return unreachable;
+    }
+  }
+}
+
+function contactPlanePose(): Pose {
+  return { x: 0, y: 1.55, z: -56, tx: 0, ty: 1.25, tz: chamberAnchor.contact - 3.2 };
+}
+
+function heldPlanePose(): Pose {
+  return {
+    x: -0.48,
+    y: 1.45,
+    z: chamberAnchor.blogs + 2.6,
+    tx: -0.48,
+    ty: 1.2,
+    tz: chamberAnchor.blogs,
+  };
+}
+
+export function shotPose(
+  chamber: ChamberId,
+  shot: string,
+  previousShot: string | null,
+  amount: number,
+): Pose | null {
+  const t = Math.min(1, Math.max(0, amount));
+  const arrived = t <= 0.18 ? t / 0.18 : 1;
+  if (chamber === "blogs" && shot === "held") {
+    return heldPlanePose();
+  }
+  if (chamber === "home" && isHomeShot(shot)) {
+    const to = homeWaypoint(shot);
+    if (previousShot && isHomeShot(previousShot)) {
+      return lerpPose(homeWaypoint(previousShot), to, arrived);
+    }
+    return to;
+  }
+  if (chamber === "about" && isAboutShot(shot)) {
+    const to = aboutWaypoint(shot);
+    if (previousShot && isAboutShot(previousShot)) {
+      return lerpPose(aboutWaypoint(previousShot), to, arrived);
+    }
+    return to;
+  }
+  return null;
+}
+
 function servicesStill(): Pose {
   const anchor = chamberAnchor.services;
   return {
@@ -88,6 +224,19 @@ function servicesStill(): Pose {
 export function stillPose(chamber: ChamberId): Pose {
   if (chamber === "services") {
     return servicesStill();
+  }
+  if (chamber === "home") {
+    return homeWaypoint("introduction");
+  }
+  if (chamber === "about") {
+    const first = getPublishedAboutBeats()[0];
+    if (first && isAboutShot(first.id)) {
+      return aboutWaypoint(first.id);
+    }
+    return aboutWaypoint("who");
+  }
+  if (chamber === "contact") {
+    return contactPlanePose();
   }
   const anchor = chamberAnchor[chamber];
   return {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { StillFrame } from "@/components/still-frame";
-import { aboutStandIn } from "@/content/about";
+import { ShotBeat } from "@/components/still-frame";
+import { aboutStandIn, getPublishedAboutBeats } from "@/content/about";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -8,25 +8,17 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const beats = getPublishedAboutBeats();
+
   return (
     <div data-chamber="about">
       <h1>About Us</h1>
-      {aboutStandIn.paragraphs.map((paragraph) => (
-        <p key={paragraph}>{paragraph}</p>
+      {beats.map((beat) => (
+        <ShotBeat key={beat.id} shot={beat.id}>
+          <h2>{beat.heading}</h2>
+          <p>{beat.body}</p>
+        </ShotBeat>
       ))}
-      <StillFrame beat="still" short />
-      <section>
-        <h2>{aboutStandIn.proofHeading}</h2>
-        <ul className="offering-list">
-          {aboutStandIn.proof.map((item) => (
-            <li key={item.label}>
-              <p>{item.label}</p>
-              <p>{item.detail}</p>
-            </li>
-          ))}
-        </ul>
-        <StillFrame beat="reveal" />
-      </section>
     </div>
   );
 }
