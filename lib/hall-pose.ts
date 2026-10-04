@@ -135,11 +135,11 @@ function homeWaypoint(shot: HomeShotId): Pose {
     case "services":
       return { x: 0, y: 2.7, z: -8.6, tx: 0, ty: 1.15, tz: servicesLook };
     case "offerings":
-      return { x: 0, y: 2.85, z: -9.2, tx: 0, ty: 1.15, tz: chamberAnchor.solutions };
+      return { x: 0, y: 2.55, z: -22, tx: 0, ty: 1.15, tz: chamberAnchor.solutions };
     case "proof":
-      return { x: -1.7, y: 2.6, z: -10, tx: -3.15, ty: 1.5, tz: -14 };
+      return { x: -0.15, y: 2.4, z: -27.5, tx: -2.55, ty: 1.35, tz: -31 };
     case "plane":
-      return { x: 0, y: 2.45, z: -33, tx: 0, ty: 1.2, tz: -38 };
+      return { x: 0, y: 2.3, z: -39.6, tx: 0, ty: 1.25, tz: -42 };
     default: {
       const unreachable: never = shot;
       return unreachable;
@@ -171,7 +171,14 @@ function contactPlanePose(): Pose {
 }
 
 function heldPlanePose(): Pose {
-  return { x: 0, y: 1.5, z: chamberAnchor.blogs + 1.8, tx: 0, ty: 1.2, tz: chamberAnchor.blogs };
+  return {
+    x: -0.48,
+    y: 1.45,
+    z: chamberAnchor.blogs + 2.6,
+    tx: -0.48,
+    ty: 1.2,
+    tz: chamberAnchor.blogs,
+  };
 }
 
 export function shotPose(

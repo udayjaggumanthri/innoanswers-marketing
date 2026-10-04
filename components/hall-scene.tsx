@@ -231,11 +231,11 @@ export function HallScene({
         <boxGeometry args={[0.08, 3, 3]} />
       </mesh>
       {proofPublished ? (
-        <mesh position={[-3.15, 1.5, -14]} material={shellMaterial}>
-          <boxGeometry args={[0.08, 2.4, 5]} />
+        <mesh position={[-2.55, 1.35, -31]} material={shellMaterial}>
+          <boxGeometry args={[0.08, 2.2, 4]} />
         </mesh>
       ) : null}
-      <mesh position={[0, 1.25, -38]} material={volumeMaterial}>
+      <mesh position={[0, 1.25, -42]} material={volumeMaterial}>
         <planeGeometry args={[1.05, 1.7]} />
       </mesh>
       <mesh position={[-1.7, 1.2, servicesZ + 2.25]} material={passingLight}>
