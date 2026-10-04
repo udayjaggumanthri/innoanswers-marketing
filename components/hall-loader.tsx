@@ -1,15 +1,8 @@
 "use client";
 
-import {
-  Component,
-  Suspense,
-  useEffect,
-  useState,
-  type ComponentType,
-  type ReactNode,
-} from "react";
+import { Component, Suspense, useEffect, useState, type ComponentType, type ReactNode } from "react";
 
-type OpeningCanvasComponent = ComponentType;
+type HallCanvasComponent = ComponentType;
 
 type BoundaryProps = {
   children: ReactNode;
@@ -19,7 +12,7 @@ type BoundaryState = {
   failed: boolean;
 };
 
-class OpeningCanvasBoundary extends Component<BoundaryProps, BoundaryState> {
+class HallBoundary extends Component<BoundaryProps, BoundaryState> {
   state: BoundaryState = { failed: false };
 
   static getDerivedStateFromError(): BoundaryState {
@@ -38,14 +31,18 @@ function webGLIsAvailable(): boolean {
   try {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
-    return context !== null;
+    if (!context) {
+      return false;
+    }
+    context.getExtension("WEBGL_lose_context")?.loseContext();
+    return true;
   } catch {
     return false;
   }
 }
 
-export function OpeningCanvasLoader() {
-  const [CanvasView, setCanvasView] = useState<OpeningCanvasComponent | null>(null);
+export function HallLoader() {
+  const [HallView, setHallView] = useState<HallCanvasComponent | null>(null);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -53,22 +50,21 @@ export function OpeningCanvasLoader() {
 
     const sync = () => {
       if (cancelled || media.matches || !webGLIsAvailable()) {
-        setCanvasView(null);
+        setHallView(null);
         return;
       }
 
-      // Dynamic import stays behind the reduced-motion and WebGL checks so the
-      // 3D chunk is not requested when either check fails.
-      void import("@/components/opening-canvas")
+      // Imported only after both checks so the 3D chunk stays unrequested otherwise.
+      void import("@/components/hall-canvas")
         .then((module) => {
           if (cancelled || media.matches || !webGLIsAvailable()) {
             return;
           }
-          setCanvasView(() => module.OpeningCanvas);
+          setHallView(() => module.HallCanvas);
         })
         .catch(() => {
           if (!cancelled) {
-            setCanvasView(null);
+            setHallView(null);
           }
         });
     };
@@ -81,17 +77,15 @@ export function OpeningCanvasLoader() {
     };
   }, []);
 
-  if (!CanvasView) {
+  if (!HallView) {
     return null;
   }
 
   return (
-    <OpeningCanvasBoundary>
+    <HallBoundary>
       <Suspense fallback={null}>
-        <div className="opening-canvas" inert aria-hidden="true">
-          <CanvasView />
-        </div>
+        <HallView />
       </Suspense>
-    </OpeningCanvasBoundary>
+    </HallBoundary>
   );
 }

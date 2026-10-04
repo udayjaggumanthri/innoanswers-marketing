@@ -1,6 +1,6 @@
 # innoanswers-marketing
 
-Foundation for the public marketing site.
+Foundation for the public marketing site. Scroll moves the camera through the current chamber. A header link opens that page and does not play the journey. If motion is reduced or WebGL is missing, the same beats stay HTML stills.
 
 ```bash
 npm run build

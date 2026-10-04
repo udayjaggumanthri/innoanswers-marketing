@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { StillFrame } from "@/components/still-frame";
 import { getPublishedArticle, getPublishedArticles } from "@/content/articles";
 
 export const dynamicParams = false;
@@ -29,8 +30,11 @@ export default async function BlogArticlePage({
   }
 
   return (
-    <article>
-      <h1>{article.title}</h1>
-    </article>
+    <div data-chamber="blogs">
+      <article>
+        <h1>{article.title}</h1>
+      </article>
+      <StillFrame beat="still" short />
+    </div>
   );
 }

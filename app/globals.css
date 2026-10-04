@@ -76,8 +76,21 @@ p {
 .service-list,
 .article-list,
 .offering-list {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+.service-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+}
+
+.article-list,
+.offering-list {
   padding-left: 1.25rem;
+  list-style: disc;
 }
 
 .service-list a,
@@ -96,27 +109,49 @@ p {
   scroll-margin-top: 1rem;
 }
 
-.opening-frame {
-  position: relative;
-  min-height: 50vh;
-  margin-top: 1.5rem;
-  border: 1px solid var(--foreground);
-  background: var(--background);
-}
-
-.opening-still {
-  min-height: 50vh;
-}
-
-.opening-canvas,
-.opening-canvas * {
+.hall-canvas,
+.hall-canvas * {
   pointer-events: none !important;
 }
 
-.opening-canvas {
-  position: absolute;
+.hall-canvas {
+  position: fixed;
   inset: 0;
-  opacity: 0;
+  z-index: 0;
+}
+
+.beat-copy,
+main :is(h1, h2, p, ul, form, article) {
+  background: var(--background);
+}
+
+.beat-copy {
+  padding-top: 0.25rem;
+}
+
+body:has(.hall-canvas) .beat-frame {
+  border-color: transparent;
+}
+
+.beat-frame {
+  min-height: 760px;
+  margin: 0 0 1.5rem;
+  border: 1px solid var(--foreground);
+  background: transparent;
+}
+
+.beat-frame-short {
+  min-height: 280px;
+}
+
+@media (max-width: 720px) {
+  .beat-frame {
+    min-height: 420px;
+  }
+
+  .beat-frame-short {
+    min-height: 180px;
+  }
 }
 
 .contact-form {
